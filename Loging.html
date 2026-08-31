@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-logo">🌍 Raahi</h1>
+            <h2>Welcome Back! 👋</h2>
+            <p class="auth-subtitle">Log in to share your travel stories</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <button type="submit" class="btn-primary auth-btn"><i class="fas fa-sign-in-alt"></i> Log In</button>
+            </form>
+
+            <div id="loginMessage" class="message"></div>
+
+            <p class="auth-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
+            <button onclick="demoLogin()" class="demo-btn"><i class="fas fa-user"></i> Try Demo Account</button>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.parentElement.querySelector('.toggle-password i');
+            if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; } 
+            else { input.type = 'password'; icon.className = 'fas fa-eye'; }
+        }
+
+        function demoLogin() {
+            document.getElementById('loginEmail').value = 'demo@raahi.com';
+            document.getElementById('loginPassword').value = 'demo123';
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const messageEl = document.getElementById('loginMessage');
+
+            // Get REAL users from localStorage
+            const users = JSON.parse(localStorage.getItem('raahi_users') || '{}');
+
+            if (users[email] && users[email].password === password) {
+                // REAL login - save user session
+                const user = {
+                    email: email,
+                    name: users[email].name,
+                    username: users[email].username,
+                    avatar: users[email].avatar || 'https://i.pravatar.cc/150?img=7',
+                    joined: users[email].joined
+                };
+                localStorage.setItem('raahi_user', JSON.stringify(user));
+                
+                // REAL redirect
+                window.location.href = 'feed.html';
+            } else {
+                messageEl.className = 'message error';
+                messageEl.innerHTML = '❌ Invalid email or password. <a href="signup.html" style="color:#FF5A5F;">Create account?</a>';
+            }
+        }
+    </script>
+</body>
+</html>
