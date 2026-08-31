@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-logo">🌍 Raahi</h1>
+            <h2>Join the Journey! ✈️</h2>
+            <p class="auth-subtitle">Create your Raahi account</p>
+
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signupName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signupEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-user-tag"></i>
+                    <input type="text" id="signupUsername" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-camera"></i>
+                    <input type="text" id="signupAvatar" placeholder="Avatar URL (optional)">
+                </div>
+                <button type="submit" class="btn-primary auth-btn"><i class="fas fa-user-plus"></i> Create Account</button>
+            </form>
+
+            <div id="signupMessage" class="message"></div>
+
+            <p class="auth-link">Already have an account? <a href="login.html">Log In</a></p>
+        </div>
+    </div>
+
+    <script>
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const avatar = document.getElementById('signupAvatar').value || `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70) + 1}`;
+            const messageEl = document.getElementById('signupMessage');
+
+            // Get REAL existing users
+            const users = JSON.parse(localStorage.getItem('raahi_users') || '{}');
+
+            // REAL validation - check if email exists
+            if (users[email]) {
+                messageEl.className = 'message error';
+                messageEl.innerHTML = '❌ Email already registered. <a href="login.html" style="color:#FF5A5F;">Log in?</a>';
+                return;
+            }
+
+            // REAL user creation - save to localStorage
+            const newUser = {
+                name: name,
+                username: username,
+                password: password,
+                avatar: avatar,
+                joined: new Date().toISOString(),
+                followers: [],
+                following: [],
+                posts: 0
+            };
+
+            users[email] = newUser;
+            localStorage.setItem('raahi_users', JSON.stringify(users));
+
+            // REAL auto-login
+            const user = {
+                email: email,
+                name: name,
+                username: username,
+                avatar: avatar,
+                joined: newUser.joined
+            };
+            localStorage.setItem('raahi_user', JSON.stringify(user));
+
+            messageEl.className = 'message success';
+            messageEl.innerHTML = '✅ Account created successfully! Redirecting...';
+
+            // REAL redirect to feed
+            setTimeout(() => {
+                window.location.href = 'feed.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
