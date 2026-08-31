@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Planner - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="explore.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">📅 Trip Planner</h1>
+            </div>
+        </nav>
+
+        <div class="trip-planner-container">
+            <form id="tripForm" onsubmit="saveTrip(event)">
+                <div class="form-group">
+                    <i class="fas fa-plane"></i>
+                    <input type="text" id="tripDestination" placeholder="Destination" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-calendar-plus"></i>
+                    <input type="date" id="tripStart" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-calendar-minus"></i>
+                    <input type="date" id="tripEnd" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-money-bill"></i>
+                    <input type="number" id="tripBudget" placeholder="Budget (₹)" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-pen"></i>
+                    <textarea id="tripNotes" placeholder="Trip notes..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;">
+                    <i class="fas fa-save"></i> Save Trip
+                </button>
+            </form>
+
+            <div class="saved-trips" id="savedTrips">
+                <h3>📋 Your Saved Trips</h3>
+                <!-- Saved trips loaded by JavaScript -->
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item active"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script src="js/trip-planner.js"></script>
+</body>
+</html>
