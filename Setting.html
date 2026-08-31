@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">⚙️ Settings</h1>
+            </div>
+        </nav>
+
+        <div class="settings-container">
+            <div class="settings-section">
+                <h3>🎨 Appearance</h3>
+                <div class="setting-item">
+                    <label>🌙 Dark Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>🌐 Language</h3>
+                <div class="setting-item">
+                    <select id="languageSelect" onchange="changeLanguage(this.value)">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="hi">🇮🇳 हिन्दी</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>🔒 Privacy</h3>
+                <div class="setting-item">
+                    <label>🔐 Private Account</label>
+                    <label class="switch">
+                        <input type="checkbox" id="privateAccount">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>📍 Share Location</label>
+                    <label class="switch">
+                        <input type="checkbox" id="shareLocation" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>🔔 Notifications</h3>
+                <div class="setting-item">
+                    <label>❤️ Like Notifications</label>
+                    <label class="switch">
+                        <input type="checkbox" id="likeNotif" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>💬 Comment Notifications</label>
+                    <label class="switch">
+                        <input type="checkbox" id="commentNotif" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>👤 Follow Notifications</label>
+                    <label class="switch">
+                        <input type="checkbox" id="followNotif" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>🚫 Account</h3>
+                <button onclick="window.location.href='edit-profile.html'" class="settings-btn">
+                    <i class="fas fa-user-edit"></i> Edit Profile
+                </button>
+                <button onclick="blockUser()" class="settings-btn">
+                    <i class="fas fa-ban"></i> Block Users
+                </button>
+                <button onclick="deleteAccount()" class="settings-btn danger">
+                    <i class="fas fa-trash"></i> Delete Account
+                </button>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item active"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+                                                          </html>
