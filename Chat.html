@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <h1 class="nav-logo">💬 Messages</h1>
+            </div>
+        </nav>
+
+        <div class="chat-container">
+            <div class="chat-list" id="chatList"></div>
+            <div class="chat-window" id="chatWindow" style="display:none;">
+                <div class="chat-header">
+                    <img id="chatAvatar" src="" alt="" class="chat-avatar">
+                    <span class="chat-name" id="chatName">User</span>
+                    <button onclick="closeChat()" class="close-chat"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type a message..." onkeypress="sendMessageOnEnter(event)">
+                    <button onclick="sendMessage()" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item active"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script>
+        const Storage = {
+            get(key, defaultValue = null) {
+                try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : defaultValue; } 
+                catch { return defaultValue; }
+            },
+            set(key, value) {
+                try { localStorage.setItem(key, JSON.stringify(value)); return true; } 
+                catch { return false; }
+            },
+            getUser() { return this.get('raahi_user'); },
+            getUsers() { return this.get('raahi_users', {}); },
+            getChats() { return this.get('raahi_chats', {}); },
+            sendMessage(to, text) {
+                const user = this.getUser();
+                if (!user) return null;
+                const chats = this.getChats();
+                const key = [user.email, to].sort().join('_');
+                if (!chats[key]) chats[key] = [];
+                const message = { id: Date.now(), from: user.email, to: to, text: text, time: new Date().toISOString() };
+                chats[key].push(message);
+                this.set('raahi_chats', chats);
+                return message;
+            },
+            getChatHistory(withUser) {
+                const user = this.getUser();
+                if (!user) return [];
+                const chats = this.getChats();
+                const key = [user.email, withUser].sort().join('_');
+                return chats[key] || [];
+            }
+        };
+
+        let currentUser = null;
+        let currentChatUser = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            currentUser = Storage.getUser();
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadChatList();
+        });
+
+        function loadChatList() {
+            const chatList = document.getElementById('chatList');
+            const users = Storage.getUsers();
+            const chats = Storage.getChats();
+            const currentEmail = currentUser.email;
+
+            // Find users who have chatted
+            const chatUsers = new Set();
+            Object.keys(chats).forEach(key => {
+                const [u1, u2] = key.split('_');
+                if (u1 === currentEmail) chatUsers.add(u2);
+                if (u2 === currentEmail) chatUsers.add(u1);
+            });
+
+            // If no chats, show all users
+            if (chatUsers.size === 0) {
+                Object.keys(users).forEach(email => {
+                    if (email !== currentEmail) chatUsers.add(email);
+                });
+            }
+
+            let html = '';
+            chatUsers.forEach(email => {
+                const user = users[email];
+                if (user) {
+                    const history = Storage.getChatHistory(email);
+                    const last = history.length > 0 ? history[history.length - 1] : null;
+                    html += `
+                        <div class="chat-item" onclick="openChat('${email}')">
+                            <div class="chat-item-avatar"><img src="${user.avatar}" alt="${user.name}"></div>
+                            <div class="chat-item-info">
+                                <div class="chat-item-name">${user.name}</div>
+                                <div class="chat-item-last">${last ? last.text : 'Start chatting...'}</div>
+                            </div>
+                            <div class="chat-item-time">${last ? timeAgo(last.time) : ''}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            chatList.innerHTML = html || '<p style="text-align:center;color:#999;padding:40px;">No users to chat with yet.</p>';
+        }
+
+        function openChat(email) {
+            currentChatUser = email;
+            const users = Storage.getUsers();
+            const user = users[email];
+            if (!user) return;
+
+            document.getElementById('chatList').style.display = 'none';
+            document.getElementById('chatWindow').style.display = 'flex';
+            document.getElementById('chatAvatar').src = user.avatar;
+            document.getElementById('chatName').textContent = user.name;
+            loadMessages(email);
+        }
+
+        function loadMessages(email) {
+            const container = document.getElementById('chatMessages');
+            const history = Storage.getChatHistory(email);
+            const currentEmail = currentUser.email;
+
+            container.innerHTML = history.map(msg => `
+                <div class="message ${msg.from === currentEmail ? 'me' : 'other'}">
+                    ${msg.text}
+                    <span class="message-time">${timeAgo(msg.time)}</span>
+                </div>
+            `).join('') || '<p style="text-align:center;color:#999;padding:20px;">No messages yet. Say hello!</p>';
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            if (!input || !input.value.trim() || !currentChatUser) return;
+            const text = input.value.trim();
+            input.value = '';
+            Storage.sendMessage(currentChatUser, text);
+            loadMessages(currentChatUser);
+        }
+
+        function sendMessageOnEnter(event) {
+            if (event.key === 'Enter') sendMessage();
+        }
+
+        function closeChat() {
+            document.getElementById('chatList').style.display = 'block';
+            document.getElementById('chatWindow').style.display = 'none';
+            currentChatUser = null;
+            loadChatList();
+        }
+
+        function timeAgo(date) {
+            const now = new Date();
+            const past = new Date(date);
+            const diff = Math.floor((now - past) / 1000);
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h';
+            return Math.floor(diff / 86400) + 'd';
+        }
+
+        // Poll for new messages
+        setInterval(() => {
+            if (currentChatUser) loadMessages(currentChatUser);
+        }, 5000);
+    </script>
+</body>
+</html>
