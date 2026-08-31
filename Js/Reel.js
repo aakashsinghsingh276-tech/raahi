@@ -1,6 +1,7 @@
-// Reels Logic - REAL Working Reels
+// Reels Logic with Music Support
 
 let currentUser = null;
+let selectedMusic = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     currentUser = Storage.getUser();
@@ -29,13 +30,16 @@ function loadReels() {
 
     container.innerHTML = reels.map(reel => {
         const user = users[reel.userEmail] || { name: reel.userEmail.split('@')[0], avatar: 'https://i.pravatar.cc/150?img=1' };
+        const music = MusicLibrary.getSong(reel.musicId);
         return `
             <div class="reel-card">
-                <img src="${reel.thumbnail || reel.image || 'https://via.placeholder.com/400x600/FF5A5F/fff?text=Reel'}" alt="Reel">
+                <img src="${reel.thumbnail || reel.image || 'https://via.placeholder.com/400x600/FF5A5F/fff?text=🎵 Reel'}" alt="Reel">
+                ${music ? `<div class="reel-music"><i class="fas fa-music"></i> ${music.title} - ${music.artist}</div>` : ''}
                 <div class="reel-overlay">
                     <div class="reel-user">
                         <img src="${user.avatar || 'https://i.pravatar.cc/150?img=1'}" alt="${user.name}" class="reel-avatar">
                         <span>${user.name}</span>
+                        ${reel.caption ? `<p style="font-size:12px;color:#ddd;margin-top:4px;">${reel.caption}</p>` : ''}
                     </div>
                     <div class="reel-actions">
                         <button onclick="likeReel('${reel.id}')"><i class="fas fa-heart"></i> ${reel.likes || 0}</button>
@@ -55,23 +59,59 @@ function uploadReel() {
     input.onchange = function(e) {
         const file = e.target.files[0];
         if (file && file.type.startsWith('video/')) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                Storage.addReel({
-                    userEmail: currentUser.email,
-                    video: event.target.result,
-                    thumbnail: null,
-                    caption: prompt('Add a caption for your reel:') || ''
-                });
-                loadReels();
-                alert('✅ Reel uploaded successfully!');
-            };
-            reader.readAsDataURL(file);
+            const caption = prompt('Add a caption for your reel:') || '';
+            
+            // Show music selection
+            showMusicSelection(file, caption);
         } else {
             alert('Please select a video file.');
         }
     };
     input.click();
+}
+
+function showMusicSelection(file, caption) {
+    const songs = MusicLibrary.getSongs();
+    let musicOptions = 'Select music for your reel:\n\n';
+    songs.forEach((s, i) => {
+        musicOptions += `${i+1}. ${s.title} - ${s.artist} (${s.genre})\n`;
+    });
+    musicOptions += '\n0. No music';
+    
+    const choice = prompt(musicOptions);
+    const musicId = parseInt(choice);
+    
+    let selectedMusicId = null;
+    if (musicId > 0 && musicId <= songs.length) {
+        selectedMusicId = songs[musicId - 1].id;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        // Create thumbnail from video (use first frame)
+        const video = document.createElement('video');
+        video.src = event.target.result;
+        video.onloadeddata = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 600;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, 400, 600);
+            const thumbnail = canvas.toDataURL('image/jpeg');
+            
+            Storage.addReel({
+                userEmail: currentUser.email,
+                video: event.target.result,
+                thumbnail: thumbnail,
+                caption: caption,
+                musicId: selectedMusicId
+            });
+            
+            alert('✅ Reel uploaded successfully!');
+            loadReels();
+        };
+    };
+    reader.readAsDataURL(file);
 }
 
 function likeReel(reelId) {
