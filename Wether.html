@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="explore.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">🌤️ Weather</h1>
+            </div>
+        </nav>
+
+        <div class="weather-container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="weatherSearch" placeholder="Enter destination..." onkeyup="getWeather(this.value)">
+            </div>
+
+            <div id="weatherDisplay" class="weather-display">
+                <!-- Weather data displayed here -->
+            </div>
+
+            <div class="weather-tips">
+                <h4>🌡️ Travel Weather Tips</h4>
+                <div class="tip-card">
+                    <i class="fas fa-sun"></i>
+                    <p>Check weather before packing</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-cloud-rain"></i>
+                    <p>Always carry a raincoat</p>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-umbrella"></i>
+                    <p>Sunscreen is essential!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item active"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script src="js/weather.js"></script>
+</body>
+</html>
