@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Library - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .music-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .music-card {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">🎵 Music Library</h1>
+            </div>
+        </nav>
+
+        <div class="music-library-container" style="padding:16px 16px 80px;">
+            <div id="musicLibraryContainer">
+                <!-- Music library loaded by JavaScript -->
+            </div>
+            
+            <div style="margin-top:20px;padding:16px;background:#f8f8f8;border-radius:12px;">
+                <h4 style="color:#FF5A5F;">💡 Tips</h4>
+                <ul style="list-style:none;padding:0;margin-top:8px;">
+                    <li style="padding:4px 0;">🎵 Add your favorite songs</li>
+                    <li style="padding:4px 0;">✏️ Edit song details anytime</li>
+                    <li style="padding:4px 0;">🗑️ Remove songs you don't want</li>
+                    <li style="padding:4px 0;">🎬 Use these songs in your reels</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item active"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script src="js/music-library.js"></script>
+</body>
+</html>
