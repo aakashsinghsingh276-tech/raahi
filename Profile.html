@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <h1 class="nav-logo">👤 Profile</h1>
+                <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </nav>
+
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img id="profileAvatar" src="" alt="Profile">
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Loading...</h2>
+                    <p id="profileUsername">@username</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="postCount">0</span>
+                            <span class="stat-label">Posts</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="followerCount">0</span>
+                            <span class="stat-label">Followers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="followingCount">0</span>
+                            <span class="stat-label">Following</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="profile-tab active" onclick="showTab('posts')">Posts</button>
+                <button class="profile-tab" onclick="showTab('saved')">Saved</button>
+            </div>
+
+            <div class="profile-grid" id="profileGrid"></div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item active"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script>
+        const Storage = {
+            get(key, defaultValue = null) {
+                try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : defaultValue; } 
+                catch { return defaultValue; }
+            },
+            getUser() { return this.get('raahi_user'); },
+            getUsers() { return this.get('raahi_users', {}); },
+            getPosts() { return this.get('raahi_posts', []); }
+        };
+
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            currentUser = Storage.getUser();
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadProfile();
+            loadUserPosts();
+        });
+
+        function loadProfile() {
+            const users = Storage.getUsers();
+            const userData = users[currentUser.email] || {};
+            
+            document.getElementById('profileAvatar').src = currentUser.avatar || 'https://i.pravatar.cc/150?img=7';
+            document.getElementById('profileName').textContent = currentUser.name || 'User';
+            document.getElementById('profileUsername').textContent = '@' + (currentUser.username || currentUser.email.split('@')[0]);
+
+            // Stats
+            const posts = Storage.getPosts();
+            const userPosts = posts.filter(p => p.userEmail === currentUser.email);
+            document.getElementById('postCount').textContent = userPosts.length;
+            document.getElementById('followerCount').textContent = userData.followers?.length || 0;
+            document.getElementById('followingCount').textContent = userData.following?.length || 0;
+        }
+
+        function loadUserPosts() {
+            const grid = document.getElementById('profileGrid');
+            const posts = Storage.getPosts();
+            const userPosts = posts.filter(p => p.userEmail === currentUser.email);
+
+            if (userPosts.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-camera" style="font-size:48px; display:block; margin-bottom:12px;"></i>
+                        <p>No posts yet. Share your first travel story!</p>
+                        <button onclick="window.location.href='upload.html'" style="margin-top:12px; padding:10px 24px; background:#FF5A5F; color:#fff; border:none; border-radius:20px; cursor:pointer;">Upload Now</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = userPosts.map(post => `
+                <div class="profile-grid-item" onclick="window.location.href='feed.html'">
+                    <img src="${post.image}" alt="Post">
+                </div>
+            `).join('');
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'posts') {
+                document.querySelector('.profile-tab:first-child').classList.add('active');
+                loadUserPosts();
+            } else {
+                document.querySelector('.profile-tab:last-child').classList.add('active');
+                const saved = JSON.parse(localStorage.getItem('raahi_saved') || '[]');
+                if (saved.length === 0) {
+                    document.getElementById('profileGrid').innerHTML = `
+                        <div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">
+                            <i class="fas fa-bookmark" style="font-size:48px; display:block; margin-bottom:12px;"></i>
+                            <p>No saved posts yet.</p>
+                        </div>
+                    `;
+                } else {
+                    const posts = Storage.getPosts();
+                    const savedPosts = posts.filter(p => saved.includes(p.id));
+                    document.getElementById('profileGrid').innerHTML = savedPosts.map(post => `
+                        <div class="profile-grid-item" onclick="window.location.href='feed.html'">
+                            <img src="${post.image}" alt="Post">
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('raahi_user');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
