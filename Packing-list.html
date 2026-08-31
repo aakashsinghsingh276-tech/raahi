@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packing List - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="explore.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">🎒 Packing List</h1>
+            </div>
+        </nav>
+
+        <div class="packing-container">
+            <div class="packing-category">
+                <h3>👕 Clothes</h3>
+                <label><input type="checkbox" class="packing-item"> T-shirts (3-4)</label>
+                <label><input type="checkbox" class="packing-item"> Pants/Shorts</label>
+                <label><input type="checkbox" class="packing-item"> Jacket/Sweater</label>
+                <label><input type="checkbox" class="packing-item"> Underwear</label>
+                <label><input type="checkbox" class="packing-item"> Socks</label>
+            </div>
+
+            <div class="packing-category">
+                <h3>📱 Electronics</h3>
+                <label><input type="checkbox" class="packing-item"> Phone & Charger</label>
+                <label><input type="checkbox" class="packing-item"> Power Bank</label>
+                <label><input type="checkbox" class="packing-item"> Camera</label>
+                <label><input type="checkbox" class="packing-item"> Headphones</label>
+                <label><input type="checkbox" class="packing-item"> Travel Adapter</label>
+            </div>
+
+            <div class="packing-category">
+                <h3>🧴 Toiletries</h3>
+                <label><input type="checkbox" class="packing-item"> Toothbrush & Paste</label>
+                <label><input type="checkbox" class="packing-item"> Shampoo & Soap</label>
+                <label><input type="checkbox" class="packing-item"> Sunscreen</label>
+                <label><input type="checkbox" class="packing-item"> Deodorant</label>
+                <label><input type="checkbox" class="packing-item"> First Aid Kit</label>
+            </div>
+
+            <div class="packing-category">
+                <h3>📄 Documents</h3>
+                <label><input type="checkbox" class="packing-item"> Passport/ID</label>
+                <label><input type="checkbox" class="packing-item"> Visa (if needed)</label>
+                <label><input type="checkbox" class="packing-item"> Travel Insurance</label>
+                <label><input type="checkbox" class="packing-item"> Flight Tickets</label>
+                <label><input type="checkbox" class="packing-item"> Hotel Bookings</label>
+            </div>
+
+            <button onclick="savePackingList()" class="btn-primary" style="width:100%;margin-top:20px;">
+                <i class="fas fa-save"></i> Save Packing List
+            </button>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item active"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script src="js/packing-list.js"></script>
+</body>
+</html>
