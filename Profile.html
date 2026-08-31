@@ -6,24 +6,312 @@
     <title>Profile - Raahi</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Profile Page Specific Styles */
+        .profile-container {
+            padding: 16px 16px 80px;
+        }
+        
+        .profile-header {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #FF5A5F;
+            flex-shrink: 0;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info h2 {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .profile-info .profile-username {
+            color: #999;
+            margin-bottom: 4px;
+        }
+        
+        .profile-info .profile-bio {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .profile-info .profile-location {
+            color: #999;
+            font-size: 13px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 24px;
+            margin: 12px 0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin: 12px 0 20px;
+            flex-wrap: wrap;
+        }
+        
+        .profile-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f0f0f0;
+            color: #262626;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-width: 80px;
+        }
+        
+        .profile-action-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .profile-action-btn.primary {
+            background: #FF5A5F;
+            color: #fff;
+        }
+        
+        .profile-action-btn.primary:hover {
+            background: #e04a4f;
+        }
+        
+        .profile-travel-stats {
+            margin: 16px 0;
+            padding: 16px;
+            background: #f8f8f8;
+            border-radius: 12px;
+        }
+        
+        body.dark-mode .profile-travel-stats {
+            background: #3d3d3d;
+        }
+        
+        .profile-travel-stats h3 {
+            color: #FF5A5F;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .travel-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        .travel-stat {
+            text-align: center;
+        }
+        
+        .travel-stat .stat-number {
+            color: #FF5A5F;
+            font-size: 20px;
+        }
+        
+        .travel-stat .stat-label {
+            font-size: 11px;
+        }
+        
+        .profile-travel-styles {
+            margin: 16px 0;
+        }
+        
+        .profile-travel-styles h3 {
+            color: #FF5A5F;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .travel-style-tag {
+            display: inline-block;
+            padding: 4px 14px;
+            background: #FF5A5F;
+            color: #fff;
+            border-radius: 16px;
+            font-size: 12px;
+            margin: 4px;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-top: 1px solid #dbdbdb;
+            margin: 16px 0;
+        }
+        
+        .profile-tab {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: none;
+            font-weight: 600;
+            color: #999;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .profile-tab.active {
+            color: #262626;
+            border-bottom-color: #FF5A5F;
+        }
+        
+        body.dark-mode .profile-tab.active {
+            color: #f5f5f5;
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+        }
+        
+        .profile-grid-item {
+            aspect-ratio: 1;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .profile-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-grid-item .grid-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+            padding: 8px;
+            color: #fff;
+            font-size: 12px;
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .profile-grid-item:hover .grid-overlay {
+            opacity: 1;
+        }
+        
+        /* Dark mode overrides */
+        body.dark-mode .profile-travel-stats {
+            background: #3d3d3d;
+        }
+        
+        body.dark-mode .profile-action-btn {
+            background: #3d3d3d;
+            color: #f5f5f5;
+        }
+        
+        body.dark-mode .profile-action-btn:hover {
+            background: #4d4d4d;
+        }
+        
+        body.dark-mode .profile-action-btn.primary {
+            background: #FF5A5F;
+            color: #fff;
+        }
+        
+        body.dark-mode .profile-action-btn.primary:hover {
+            background: #e04a4f;
+        }
+        
+        /* Responsive */
+        @media (max-width: 500px) {
+            .travel-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .profile-actions {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
+        <!-- Top Navigation -->
         <nav class="nav-bar">
             <div class="nav-content">
                 <h1 class="nav-logo">👤 Profile</h1>
-                <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+                <div class="nav-links">
+                    <a href="notifications.html" class="nav-link" id="notifLink">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="notifBadge"></span>
+                    </a>
+                    <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
             </div>
         </nav>
 
+        <!-- Profile Content -->
         <div class="profile-container">
+            <!-- Profile Header -->
             <div class="profile-header">
                 <div class="profile-avatar">
                     <img id="profileAvatar" src="" alt="Profile">
                 </div>
                 <div class="profile-info">
                     <h2 id="profileName">Loading...</h2>
-                    <p id="profileUsername">@username</p>
+                    <div class="profile-username" id="profileUsername">@username</div>
+                    <div class="profile-bio" id="profileBio"></div>
+                    <div class="profile-location" id="profileLocation"></div>
+                    
                     <div class="profile-stats">
                         <div class="stat">
                             <span class="stat-number" id="postCount">0</span>
@@ -41,14 +329,74 @@
                 </div>
             </div>
 
-            <div class="profile-tabs">
-                <button class="profile-tab active" onclick="showTab('posts')">Posts</button>
-                <button class="profile-tab" onclick="showTab('saved')">Saved</button>
+            <!-- Profile Actions -->
+            <div class="profile-actions">
+                <button onclick="window.location.href='edit-profile.html'" class="profile-action-btn">
+                    <i class="fas fa-user-edit"></i> Edit Profile
+                </button>
+                <button onclick="window.location.href='music-library.html'" class="profile-action-btn">
+                    <i class="fas fa-music"></i> Music
+                </button>
+                <button onclick="window.location.href='travel-map.html'" class="profile-action-btn">
+                    <i class="fas fa-map"></i> Map
+                </button>
+                <button onclick="window.location.href='badges.html'" class="profile-action-btn">
+                    <i class="fas fa-trophy"></i> Badges
+                </button>
+                <button onclick="window.location.href='settings.html'" class="profile-action-btn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
             </div>
 
-            <div class="profile-grid" id="profileGrid"></div>
+            <!-- Travel Stats -->
+            <div class="profile-travel-stats">
+                <h3>✈️ Travel Stats</h3>
+                <div class="travel-stats-grid">
+                    <div class="travel-stat">
+                        <span class="stat-number" id="countriesVisited">0</span>
+                        <span class="stat-label">Places</span>
+                    </div>
+                    <div class="travel-stat">
+                        <span class="stat-number" id="totalTrips">0</span>
+                        <span class="stat-label">Posts</span>
+                    </div>
+                    <div class="travel-stat">
+                        <span class="stat-number" id="totalLikes">0</span>
+                        <span class="stat-label">Total Likes</span>
+                    </div>
+                    <div class="travel-stat">
+                        <span class="stat-number" id="totalCheckins">0</span>
+                        <span class="stat-label">Check-ins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Styles -->
+            <div class="profile-travel-styles" id="travelStylesSection">
+                <h3>🧳 Travel Style</h3>
+                <div id="travelStylesDisplay"></div>
+            </div>
+
+            <!-- Profile Tabs -->
+            <div class="profile-tabs">
+                <button class="profile-tab active" onclick="showProfileTab('posts')">
+                    <i class="fas fa-grid"></i> Posts
+                </button>
+                <button class="profile-tab" onclick="showProfileTab('saved')">
+                    <i class="fas fa-bookmark"></i> Saved
+                </button>
+                <button class="profile-tab" onclick="showProfileTab('reels')">
+                    <i class="fas fa-video"></i> Reels
+                </button>
+            </div>
+
+            <!-- Profile Grid -->
+            <div class="profile-grid" id="profileGrid">
+                <!-- User posts loaded by JavaScript -->
+            </div>
         </div>
 
+        <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
             <a href="explore.html" class="bottom-nav-item"><i class="fas fa-search"></i></a>
@@ -58,18 +406,15 @@
         </div>
     </div>
 
+    <script src="js/storage.js"></script>
+    <script src="js/utils.js"></script>
     <script>
-        const Storage = {
-            get(key, defaultValue = null) {
-                try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : defaultValue; } 
-                catch { return defaultValue; }
-            },
-            getUser() { return this.get('raahi_user'); },
-            getUsers() { return this.get('raahi_users', {}); },
-            getPosts() { return this.get('raahi_posts', []); }
-        };
+        // ============================================================
+        // Profile Logic - Complete Working Profile
+        // ============================================================
 
         let currentUser = null;
+        let allUserPosts = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             currentUser = Storage.getUser();
@@ -78,79 +423,129 @@
                 return;
             }
             loadProfile();
-            loadUserPosts();
+            loadUserPosts('posts');
+            updateNotificationBadge();
         });
 
+        // ========== LOAD PROFILE ==========
         function loadProfile() {
             const users = Storage.getUsers();
             const userData = users[currentUser.email] || {};
             
+            // Basic info
             document.getElementById('profileAvatar').src = currentUser.avatar || 'https://i.pravatar.cc/150?img=7';
             document.getElementById('profileName').textContent = currentUser.name || 'User';
             document.getElementById('profileUsername').textContent = '@' + (currentUser.username || currentUser.email.split('@')[0]);
-
+            
+            // Bio
+            const bioEl = document.getElementById('profileBio');
+            if (userData.bio) {
+                bioEl.textContent = userData.bio;
+            } else {
+                bioEl.textContent = '🌍 Traveler • Explorer • Storyteller';
+            }
+            
+            // Location
+            const locationEl = document.getElementById('profileLocation');
+            if (userData.location) {
+                locationEl.textContent = '📍 ' + userData.location;
+            } else {
+                locationEl.textContent = '📍 Location not set';
+            }
+            
             // Stats
             const posts = Storage.getPosts();
             const userPosts = posts.filter(p => p.userEmail === currentUser.email);
-            document.getElementById('postCount').textContent = userPosts.length;
+            const userReels = Storage.getReels().filter(r => r.userEmail === currentUser.email);
+            const checkins = Storage.getUserCheckIns(currentUser.email);
+            
+            document.getElementById('postCount').textContent = userPosts.length + userReels.length;
             document.getElementById('followerCount').textContent = userData.followers?.length || 0;
             document.getElementById('followingCount').textContent = userData.following?.length || 0;
-        }
-
-        function loadUserPosts() {
-            const grid = document.getElementById('profileGrid');
-            const posts = Storage.getPosts();
-            const userPosts = posts.filter(p => p.userEmail === currentUser.email);
-
-            if (userPosts.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">
-                        <i class="fas fa-camera" style="font-size:48px; display:block; margin-bottom:12px;"></i>
-                        <p>No posts yet. Share your first travel story!</p>
-                        <button onclick="window.location.href='upload.html'" style="margin-top:12px; padding:10px 24px; background:#FF5A5F; color:#fff; border:none; border-radius:20px; cursor:pointer;">Upload Now</button>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = userPosts.map(post => `
-                <div class="profile-grid-item" onclick="window.location.href='feed.html'">
-                    <img src="${post.image}" alt="Post">
-                </div>
-            `).join('');
-        }
-
-        function showTab(tab) {
-            document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-            if (tab === 'posts') {
-                document.querySelector('.profile-tab:first-child').classList.add('active');
-                loadUserPosts();
+            
+            // Travel Stats
+            const totalLikes = userPosts.reduce((sum, p) => sum + (p.likes || 0), 0);
+            const places = new Set();
+            userPosts.forEach(p => { if (p.location) places.add(p.location); });
+            checkins.forEach(c => { if (c.location) places.add(c.location); });
+            
+            document.getElementById('countriesVisited').textContent = places.size || 0;
+            document.getElementById('totalTrips').textContent = userPosts.length + userReels.length;
+            document.getElementById('totalLikes').textContent = totalLikes;
+            document.getElementById('totalCheckins').textContent = checkins.length;
+            
+            // Travel Styles
+            const stylesContainer = document.getElementById('travelStylesDisplay');
+            if (userData.travelStyles && userData.travelStyles.length > 0) {
+                stylesContainer.innerHTML = userData.travelStyles.map(style => 
+                    `<span class="travel-style-tag">${style}</span>`
+                ).join('');
             } else {
-                document.querySelector('.profile-tab:last-child').classList.add('active');
-                const saved = JSON.parse(localStorage.getItem('raahi_saved') || '[]');
-                if (saved.length === 0) {
-                    document.getElementById('profileGrid').innerHTML = `
+                stylesContainer.innerHTML = '<span style="color:#999;font-size:13px;">No travel styles set</span>';
+            }
+        }
+
+        // ========== LOAD USER POSTS ==========
+        function loadUserPosts(tab = 'posts') {
+            const grid = document.getElementById('profileGrid');
+            
+            let items = [];
+            
+            if (tab === 'posts') {
+                const posts = Storage.getPosts();
+                items = posts.filter(p => p.userEmail === currentUser.email);
+                
+                if (items.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">
+                            <i class="fas fa-camera" style="font-size:48px; display:block; margin-bottom:12px;"></i>
+                            <p>No posts yet. Share your first travel story!</p>
+                            <button onclick="window.location.href='upload.html'" style="margin-top:12px; padding:10px 24px; background:#FF5A5F; color:#fff; border:none; border-radius:20px; cursor:pointer;">Upload Now</button>
+                        </div>
+                    `;
+                    return;
+                }
+            } else if (tab === 'saved') {
+                const saved = Storage.get('raahi_saved_posts', []);
+                const posts = Storage.getPosts();
+                items = posts.filter(p => saved.includes(p.id));
+                
+                if (items.length === 0) {
+                    grid.innerHTML = `
                         <div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">
                             <i class="fas fa-bookmark" style="font-size:48px; display:block; margin-bottom:12px;"></i>
                             <p>No saved posts yet.</p>
+                            <p style="font-size:13px;">Save posts you like to view them here!</p>
                         </div>
                     `;
-                } else {
-                    const posts = Storage.getPosts();
-                    const savedPosts = posts.filter(p => saved.includes(p.id));
-                    document.getElementById('profileGrid').innerHTML = savedPosts.map(post => `
-                        <div class="profile-grid-item" onclick="window.location.href='feed.html'">
-                            <img src="${post.image}" alt="Post">
+                    return;
+                }
+            } else if (tab === 'reels') {
+                const reels = Storage.getReels();
+                items = reels.filter(r => r.userEmail === currentUser.email);
+                
+                if (items.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column:1/-1; text-align:center; padding:40px; color:#999;">
+                            <i class="fas fa-video" style="font-size:48px; display:block; margin-bottom:12px;"></i>
+                            <p>No reels yet.</p>
+                            <button onclick="window.location.href='upload.html'" style="margin-top:12px; padding:10px 24px; background:#FF5A5F; color:#fff; border:none; border-radius:20px; cursor:pointer;">Create Reel</button>
                         </div>
-                    `).join('');
+                    `;
+                    return;
                 }
             }
-        }
-
-        function logout() {
-            localStorage.removeItem('raahi_user');
-            window.location.href = 'login.html';
-        }
-    </script>
-</body>
-</html>
+            
+            // Render grid
+            grid.innerHTML = items.map(item => {
+                const image = item.image || item.thumbnail || 'https://via.placeholder.com/300x300/FF5A5F/fff?text=📷';
+                const likes = item.likes || 0;
+                const comments = item.comments?.length || 0;
+                const type = item.video ? '🎬' : '📸';
+                
+                return `
+                    <div class="profile-grid-item" onclick="window.location.href='feed.html'">
+                        <img src="${image}" alt="Post">
+                        <div class="grid-overlay">
+                            <span><i class="fas fa-heart"></i> ${likes}</span>
+                            <span><i class="fas fa-co
