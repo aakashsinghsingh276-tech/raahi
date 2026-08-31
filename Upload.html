@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="feed.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">📸 New Post</h1>
+            </div>
+        </nav>
+
+        <div class="upload-container">
+            <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <p>Click to upload photo</p>
+                <input type="file" id="fileInput" accept="image/*" hidden onchange="previewFile(event)">
+            </div>
+
+            <div class="upload-preview" id="uploadPreview" style="display:none;">
+                <img id="previewImage" src="" alt="Preview">
+                <button onclick="removeFile()" class="remove-file"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="postForm" onsubmit="handleUpload(event)">
+                <div class="form-group">
+                    <i class="fas fa-pen"></i>
+                    <input type="text" id="postCaption" placeholder="Write a caption..." required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-hashtag"></i>
+                    <input type="text" id="postHashtags" placeholder="Add hashtags (e.g., #travel #beach)">
+                </div>
+                <button type="submit" class="btn-primary share-btn"><i class="fas fa-cloud-upload-alt"></i> Share Post</button>
+            </form>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item active"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script>
+        const Storage = {
+            get(key, defaultValue = null) {
+                try { const data = localStorage.getItem(key); return data ? JSON.parse(data) : defaultValue; } 
+                catch { return defaultValue; }
+            },
+            set(key, value) {
+                try { localStorage.setItem(key, JSON.stringify(value)); return true; } 
+                catch { return false; }
+            },
+            getUser() { return this.get('raahi_user'); },
+            getPosts() { return this.get('raahi_posts', []); },
+            addPost(post) {
+                const posts = this.getPosts();
+                posts.unshift({ id: Date.now(), ...post, createdAt: new Date().toISOString(), likes: 0, liked: false, comments: [] });
+                this.set('raahi_posts', posts);
+                return posts[0];
+            }
+        };
+
+        let selectedFile = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = Storage.getUser();
+            if (!user) window.location.href = 'login.html';
+        });
+
+        function previewFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImage').src = e.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('uploadBox').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeFile() {
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('uploadBox').style.display = 'block';
+        }
+
+        function handleUpload(event) {
+            event.preventDefault();
+            if (!selectedFile) {
+                alert('Please select a photo to upload.');
+                return;
+            }
+
+            const caption = document.getElementById('postCaption').value;
+            const hashtags = document.getElementById('postHashtags').value;
+            const user = Storage.getUser();
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                Storage.addPost({
+                    userEmail: user.email,
+                    image: e.target.result,
+                    caption: caption,
+                    hashtags: hashtags
+                });
+                alert('✅ Post uploaded successfully!');
+                window.location.href = 'feed.html';
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    </script>
+</body>
+</html>
