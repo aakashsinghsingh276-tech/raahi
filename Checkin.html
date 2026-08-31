@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-in - Raahi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <a href="explore.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 class="nav-logo">📍 Check-in</h1>
+            </div>
+        </nav>
+
+        <div class="checkin-container">
+            <div class="checkin-form">
+                <h3>📍 Where are you?</h3>
+                <form id="checkinForm" onsubmit="checkIn(event)">
+                    <div class="form-group">
+                        <i class="fas fa-map-pin"></i>
+                        <input type="text" id="checkinLocation" placeholder="Enter location..." required>
+                        <button type="button" onclick="getLocation()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#FF5A5F;cursor:pointer;">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-pen"></i>
+                        <input type="text" id="checkinNotes" placeholder="What are you doing?">
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-users"></i>
+                        <input type="text" id="checkinWith" placeholder="Traveling with (optional)">
+                    </div>
+                    <button type="submit" class="btn-primary" style="width:100%;">
+                        <i class="fas fa-map-pin"></i> Check-in
+                    </button>
+                </form>
+            </div>
+
+            <div class="checkin-history">
+                <h3>📋 Your Check-ins</h3>
+                <div id="checkinList">
+                    <!-- Check-ins loaded by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="feed.html" class="bottom-nav-item"><i class="fas fa-home"></i></a>
+            <a href="explore.html" class="bottom-nav-item active"><i class="fas fa-search"></i></a>
+            <a href="upload.html" class="bottom-nav-item"><i class="fas fa-plus-circle"></i></a>
+            <a href="chat.html" class="bottom-nav-item"><i class="fas fa-comment"></i></a>
+            <a href="profile.html" class="bottom-nav-item"><i class="fas fa-user"></i></a>
+        </div>
+    </div>
+
+    <script src="js/checkin.js"></script>
+</body>
+</html>
