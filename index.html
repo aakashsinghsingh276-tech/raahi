@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raahi - Share Your Travel Stories</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">🌍 Raahi</h1>
+                <div class="header-actions">
+                    <button onclick="window.location.href='login.html'" class="login-btn">Log In</button>
+                    <button onclick="window.location.href='signup.html'" class="signup-btn">Sign Up</button>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h2>🌏 Share Your Travel Stories</h2>
+                <p>Connect with real travelers worldwide. Share photos, videos, and experiences.</p>
+                <div class="hero-buttons">
+                    <button onclick="window.location.href='signup.html'" class="btn-primary">Get Started</button>
+                    <button onclick="window.location.href='feed.html'" class="btn-secondary">Explore Feed</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="feature-grid">
+                    <div class="feature-card"><i class="fas fa-camera"></i><h3>Share Photos</h3><p>Upload your travel memories</p></div>
+                    <div class="feature-card"><i class="fas fa-comment"></i><h3>Chat Real-time</h3><p>Message other travelers</p></div>
+                    <div class="feature-card"><i class="fas fa-heart"></i><h3>Like & Comment</h3><p>Engage with the community</p></div>
+                    <div class="feature-card"><i class="fas fa-globe-asia"></i><h3>Discover Places</h3><p>Find your next destination</p></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer"><p>Made with ❤️ by Raahi Community</p></footer>
+    </div>
+    <script>
+        const user = localStorage.getItem('raahi_user');
+        if (user) {
+            document.querySelector('.login-btn').textContent = 'Dashboard';
+            document.querySelector('.login-btn').onclick = () => window.location.href = 'feed.html';
+            document.querySelector('.signup-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
